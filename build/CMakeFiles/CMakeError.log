@@ -1,0 +1,76 @@
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: D:/Pico/pico-project-generator/build/CMakeFiles/CMakeScratch/TryCompile-erlsza
+
+Run Build Command(s):C:/PROGRA~2/MICROS~3/2022/BUILDT~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_01be2 && [1/2] Building C object CMakeFiles/cmTC_01be2.dir/CMakeCCompilerABI.c.obj
+Using built-in specs.
+COLLECT_GCC=D:\Program Files (x86)\Arm GNU Toolchain arm-none-eabi\12.2 rel1\bin\arm-none-eabi-gcc.exe
+Target: arm-none-eabi
+Configured with: /data/jenkins/workspace/GNU-toolchain/arm-12/src/gcc/configure --target=arm-none-eabi --prefix=/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/install --with-gmp=/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/host-tools --with-mpfr=/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/host-tools --with-mpc=/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/host-tools --with-isl=/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/host-tools --disable-shared --disable-nls --disable-threads --disable-tls --enable-checking=release --enable-languages=c,c++,fortran --with-newlib --with-gnu-as --with-gnu-ld --with-sysroot=/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/install/arm-none-eabi --with-multilib-list=aprofile,rmprofile --with-libiconv-prefix=/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/host-tools --host=i686-w64-mingw32 --with-pkgversion='Arm GNU Toolchain 12.2.Rel1 (Build arm-12.24)' --with-bugurl=https://bugs.linaro.org/
+Thread model: single
+Supported LTO compression algorithms: zlib
+gcc version 12.2.1 20221205 (Arm GNU Toolchain 12.2.Rel1 (Build arm-12.24)) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_01be2.dir/CMakeCCompilerABI.c.obj' '-c' '-mcpu=arm7tdmi' '-mfloat-abi=soft' '-marm' '-mlibarch=armv4t' '-march=armv4t' '-dumpdir' 'CMakeFiles/cmTC_01be2.dir/'
+ d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../libexec/gcc/arm-none-eabi/12.2.1/cc1.exe -quiet -v -iprefix d:\program files (x86)\arm gnu toolchain arm-none-eabi\12.2 rel1\bin\../lib/gcc/arm-none-eabi/12.2.1/ -isysroot d:\program files (x86)\arm gnu toolchain arm-none-eabi\12.2 rel1\bin\../arm-none-eabi -D__USES_INITFINI__ D:/Program Files/CMake/share/cmake-3.25/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_01be2.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mcpu=arm7tdmi -mfloat-abi=soft -marm -mlibarch=armv4t -march=armv4t -version -o C:\Users\junso\AppData\Local\Temp\ccrEFzJO.s
+GNU C17 (Arm GNU Toolchain 12.2.Rel1 (Build arm-12.24)) version 12.2.1 20221205 (arm-none-eabi)
+	compiled by GNU C version 9.3-win32 20200320, GMP version 6.2.1, MPFR version 3.1.6, MPC version 1.0.3, isl version isl-0.15-1-g835ea3a-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring duplicate directory "d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/lib/gcc/../../lib/gcc/arm-none-eabi/12.2.1/include"
+ignoring nonexistent directory "d:\program files (x86)\arm gnu toolchain arm-none-eabi\12.2 rel1\bin\../arm-none-eabi/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/install/lib/gcc/arm-none-eabi/12.2.1/../../../../include"
+ignoring duplicate directory "d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/lib/gcc/../../lib/gcc/arm-none-eabi/12.2.1/include-fixed"
+ignoring duplicate directory "d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/lib/gcc/../../lib/gcc/arm-none-eabi/12.2.1/../../../../arm-none-eabi/include"
+ignoring nonexistent directory "d:\program files (x86)\arm gnu toolchain arm-none-eabi\12.2 rel1\bin\../arm-none-eabi/usr/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ d:\program files (x86)\arm gnu toolchain arm-none-eabi\12.2 rel1\bin\../lib/gcc/arm-none-eabi/12.2.1/include
+ d:\program files (x86)\arm gnu toolchain arm-none-eabi\12.2 rel1\bin\../lib/gcc/arm-none-eabi/12.2.1/include-fixed
+ d:\program files (x86)\arm gnu toolchain arm-none-eabi\12.2 rel1\bin\../lib/gcc/arm-none-eabi/12.2.1/../../../../arm-none-eabi/include
+End of search list.
+GNU C17 (Arm GNU Toolchain 12.2.Rel1 (Build arm-12.24)) version 12.2.1 20221205 (arm-none-eabi)
+	compiled by GNU C version 9.3-win32 20200320, GMP version 6.2.1, MPFR version 3.1.6, MPC version 1.0.3, isl version isl-0.15-1-g835ea3a-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 09cd87bee7d3ebbf93fc326691d67ce6
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_01be2.dir/CMakeCCompilerABI.c.obj' '-c' '-mcpu=arm7tdmi' '-mfloat-abi=soft' '-marm' '-mlibarch=armv4t' '-march=armv4t' '-dumpdir' 'CMakeFiles/cmTC_01be2.dir/'
+ d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/../../../../arm-none-eabi/bin/as.exe -v -march=armv4t -mfloat-abi=soft -meabi=5 -o CMakeFiles/cmTC_01be2.dir/CMakeCCompilerABI.c.obj C:\Users\junso\AppData\Local\Temp\ccrEFzJO.s
+GNU assembler version 2.39.0 (arm-none-eabi) using BFD version (Arm GNU Toolchain 12.2.Rel1 (Build arm-12.24)) 2.39.0.20221210
+COMPILER_PATH=d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../libexec/gcc/arm-none-eabi/12.2.1/;d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../libexec/gcc/;d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/../../../../arm-none-eabi/bin/
+LIBRARY_PATH=d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/;d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/;d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/../../../../arm-none-eabi/lib/;d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../arm-none-eabi/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_01be2.dir/CMakeCCompilerABI.c.obj' '-c' '-mcpu=arm7tdmi' '-mfloat-abi=soft' '-marm' '-mlibarch=armv4t' '-march=armv4t' '-dumpdir' 'CMakeFiles/cmTC_01be2.dir/CMakeCCompilerABI.c.'
+[2/2] Linking C executable cmTC_01be2.exe
+FAILED: cmTC_01be2.exe 
+cmd.exe /C "cd . && "D:\Program Files (x86)\Arm GNU Toolchain arm-none-eabi\12.2 rel1\bin\arm-none-eabi-gcc.exe"  -v CMakeFiles/cmTC_01be2.dir/CMakeCCompilerABI.c.obj -o cmTC_01be2.exe -Wl,--out-implib,libcmTC_01be2.dll.a -Wl,--major-image-version,0,--minor-image-version,0   && cd ."
+Using built-in specs.
+COLLECT_GCC=D:\Program Files (x86)\Arm GNU Toolchain arm-none-eabi\12.2 rel1\bin\arm-none-eabi-gcc.exe
+COLLECT_LTO_WRAPPER=d:/program\ files\ (x86)/arm\ gnu\ toolchain\ arm-none-eabi/12.2\ rel1/bin/../libexec/gcc/arm-none-eabi/12.2.1/lto-wrapper.exe
+Target: arm-none-eabi
+Configured with: /data/jenkins/workspace/GNU-toolchain/arm-12/src/gcc/configure --target=arm-none-eabi --prefix=/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/install --with-gmp=/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/host-tools --with-mpfr=/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/host-tools --with-mpc=/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/host-tools --with-isl=/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/host-tools --disable-shared --disable-nls --disable-threads --disable-tls --enable-checking=release --enable-languages=c,c++,fortran --with-newlib --with-gnu-as --with-gnu-ld --with-sysroot=/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/install/arm-none-eabi --with-multilib-list=aprofile,rmprofile --with-libiconv-prefix=/data/jenkins/workspace/GNU-toolchain/arm-12/build-mingw-arm-none-eabi/host-tools --host=i686-w64-mingw32 --with-pkgversion='Arm GNU Toolchain 12.2.Rel1 (Build arm-12.24)' --with-bugurl=https://bugs.linaro.org/
+Thread model: single
+Supported LTO compression algorithms: zlib
+gcc version 12.2.1 20221205 (Arm GNU Toolchain 12.2.Rel1 (Build arm-12.24)) 
+COMPILER_PATH=d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../libexec/gcc/arm-none-eabi/12.2.1/;d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../libexec/gcc/;d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/../../../../arm-none-eabi/bin/
+LIBRARY_PATH=d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/;d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/;d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/../../../../arm-none-eabi/lib/;d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../arm-none-eabi/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_01be2.exe' '-mcpu=arm7tdmi' '-mfloat-abi=soft' '-marm' '-mlibarch=armv4t' '-march=armv4t' '-dumpdir' 'cmTC_01be2.'
+ d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../libexec/gcc/arm-none-eabi/12.2.1/collect2.exe -plugin d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../libexec/gcc/arm-none-eabi/12.2.1/liblto_plugin.dll -plugin-opt=d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../libexec/gcc/arm-none-eabi/12.2.1/lto-wrapper.exe -plugin-opt=-fresolution=C:\Users\junso\AppData\Local\Temp\cc5QOLuZ.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc --sysroot=d:\program files (x86)\arm gnu toolchain arm-none-eabi\12.2 rel1\bin\../arm-none-eabi -X -o cmTC_01be2.exe d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/crti.o d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/crtbegin.o d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/crt0.o -Ld:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1 -Ld:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc -Ld:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/../../../../arm-none-eabi/lib -Ld:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../arm-none-eabi/lib CMakeFiles/cmTC_01be2.dir/CMakeCCompilerABI.c.obj --out-implib libcmTC_01be2.dll.a --major-image-version 0 --minor-image-version 0 --start-group -lgcc -lc --end-group d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/crtend.o d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/crtn.o
+d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/../../../../arm-none-eabi/bin/ld.exe: unrecognized option '--major-image-version'
+d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/../../../../arm-none-eabi/bin/ld.exe: use the --help option for usage information
+collect2.exe: error: ld returned 1 exit status
+ninja: build stopped: subcommand failed.
+
+
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: D:/Pico/pico-project-generator/build/CMakeFiles/CMakeScratch/TryCompile-slqvy2
+
+Run Build Command(s):C:/PROGRA~2/MICROS~3/2022/BUILDT~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_a572e && [1/2] Building C object CMakeFiles/cmTC_a572e.dir/testCCompiler.c.obj
+[2/2] Linking C executable cmTC_a572e.exe
+FAILED: cmTC_a572e.exe 
+cmd.exe /C "cd . && "D:\Program Files (x86)\Arm GNU Toolchain arm-none-eabi\12.2 rel1\bin\arm-none-eabi-gcc.exe"   CMakeFiles/cmTC_a572e.dir/testCCompiler.c.obj -o cmTC_a572e.exe -Wl,--out-implib,libcmTC_a572e.dll.a -Wl,--major-image-version,0,--minor-image-version,0  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 && cd ."
+d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/../../../../arm-none-eabi/bin/ld.exe: unrecognized option '--major-image-version'
+d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/../../../../arm-none-eabi/bin/ld.exe: use the --help option for usage information
+collect2.exe: error: ld returned 1 exit status
+ninja: build stopped: subcommand failed.
+
+
+

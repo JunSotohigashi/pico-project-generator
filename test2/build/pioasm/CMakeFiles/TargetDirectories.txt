@@ -1,0 +1,3 @@
+D:/Pico/pico-project-generator/test2/build/pioasm/CMakeFiles/pioasm.dir
+D:/Pico/pico-project-generator/test2/build/pioasm/CMakeFiles/edit_cache.dir
+D:/Pico/pico-project-generator/test2/build/pioasm/CMakeFiles/rebuild_cache.dir
