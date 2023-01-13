@@ -19,7 +19,6 @@ Linker script and memory map
 LOAD pico-sdk/src/rp2_common/boot_stage2/CMakeFiles/bs2_default.dir/compile_time_choice.S.obj
 START GROUP
 LOAD d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/thumb/v6-m/nofp\libgcc.a
-LOAD d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/thumb/v6-m/nofp\libg.a
 LOAD d:/program files (x86)/arm gnu toolchain arm-none-eabi/12.2 rel1/bin/../lib/gcc/arm-none-eabi/12.2.1/thumb/v6-m/nofp\libc.a
 END GROUP
 START GROUP
@@ -61,24 +60,3 @@ LOAD linker stubs
                 0x00000000       0x22
  .ARM.attributes
                 0x00000000       0x22 pico-sdk/src/rp2_common/boot_stage2/CMakeFiles/bs2_default.dir/compile_time_choice.S.obj
-
-.debug_line     0x00000000       0xed
- .debug_line    0x00000000       0xed pico-sdk/src/rp2_common/boot_stage2/CMakeFiles/bs2_default.dir/compile_time_choice.S.obj
-
-.debug_line_str
-                0x00000000       0xe6
- .debug_line_str
-                0x00000000       0xe6 pico-sdk/src/rp2_common/boot_stage2/CMakeFiles/bs2_default.dir/compile_time_choice.S.obj
-
-.debug_info     0x00000000       0x25
- .debug_info    0x00000000       0x25 pico-sdk/src/rp2_common/boot_stage2/CMakeFiles/bs2_default.dir/compile_time_choice.S.obj
-
-.debug_abbrev   0x00000000       0x14
- .debug_abbrev  0x00000000       0x14 pico-sdk/src/rp2_common/boot_stage2/CMakeFiles/bs2_default.dir/compile_time_choice.S.obj
-
-.debug_aranges  0x00000000       0x20
- .debug_aranges
-                0x00000000       0x20 pico-sdk/src/rp2_common/boot_stage2/CMakeFiles/bs2_default.dir/compile_time_choice.S.obj
-
-.debug_str      0x00000000       0x7a
- .debug_str     0x00000000       0x7a pico-sdk/src/rp2_common/boot_stage2/CMakeFiles/bs2_default.dir/compile_time_choice.S.obj
