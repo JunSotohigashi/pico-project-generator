@@ -133,61 +133,86 @@ uint8_t decode_bin(int8_t num, bool dp)
     return result;
 }
 
-void note_control(bool on, uint8_t note, uint8_t velocity)
+void note_control(bool on, uint8_t note, uint8_t velocity, bool init_only = false)
 {
-    static uint8_t ch0_note = 0;
-    static uint8_t ch1_note = 0;
-    static bool ch0_state = false;
-    static bool ch1_state = false;
-    static bool oldest_is_ch0 = true;
-    if (velocity == 0)
+    static bool first = true;
+    static uint8_t velo_list[128];
+    if (first || init_only)
     {
-        on = false;
+        for (auto i = 0; i < 128; i++)
+        {
+            velo_list[i] = 0;
+        }
+        first = false;
+        if(init_only)
+        {
+            return;
+        }
     }
-    // printf("%d, %3d, %3d\n", on, note, velocity);
 
-    if (on)
+    if (!on || velocity == 0)
     {
-        // buz0->set_freq_by_note(note);
-        // buz0->set_duty(0.5 * (velocity / 127.0));
-        // buz0->set_gate(true);
-        if (oldest_is_ch0)
-        {
-            ch0_note = note;
-            buz0->set_freq_by_note(note);
-            buz0->set_duty(0.5 * (velocity / 127.0));
-            buz0->set_gate(true);
-            ch0_state = true;
-            oldest_is_ch0 = false;
-        }
-        else
-        {
-            ch1_note = note;
-            buz1->set_freq_by_note(note);
-            buz1->set_duty(0.5 * (velocity / 127.0));
-            buz1->set_gate(true);
-            ch1_state = true;
-            oldest_is_ch0 = true;
-        }
+        velo_list[note] = 0;
     }
     else
     {
-        if (note == ch0_note)
+        velo_list[note] = velocity;
+    }
+
+    uint8_t note_high;
+    uint8_t note_low;
+    uint8_t note_count = 0;
+    for (auto i = 127; i >= 0; i--)
+    {
+        if (velo_list[i] != 0)
         {
-            buz0->set_gate(false);
-            ch0_state = false;
+            note_high = i;
+            note_count++;
+            break;
         }
-        else if (note == ch1_note)
+    }
+    for (auto i = 0; i < 128; i++)
+    {
+        if (velo_list[i] != 0)
         {
-            buz1->set_gate(false);
-            ch1_state = false;
+            note_low = i;
+            note_count++;
+            break;
         }
-        // buz0->set_gate(false);
+    }
+    if (note_high == note_low)
+    {
+        note_count = 1;
+    }
+    switch (note_count)
+    {
+    case 0:
+        buz0->set_gate(false);
+        buz1->set_gate(false);
+        break;
+
+    case 1:
+        buz0->set_freq_by_note(note_high);
+        buz0->set_duty(0.5 * (velo_list[note_high] / 127.0));
+        buz0->set_gate(true);
+        buz1->set_gate(false);
+        break;
+
+    case 2:
+        buz0->set_freq_by_note(note_high);
+        buz0->set_duty(0.5 * (velo_list[note_high] / 127.0));
+        buz0->set_gate(true);
+        buz1->set_freq_by_note(note_low);
+        buz1->set_duty(0.5 * (velo_list[note_low] / 127.0));
+        buz1->set_gate(true);
+    default:
+        break;
     }
 }
 
 void play_midi(uint8_t *midi_data)
 {
+    printf("MIDI read start!\n");
     uint32_t pointer = 0;
     uint32_t tempo = 500000;
 
@@ -213,7 +238,7 @@ void play_midi(uint8_t *midi_data)
     smf_format = midi_data[pointer++] << 8 | midi_data[pointer++];
     number_of_tracks = midi_data[pointer++] << 8 | midi_data[pointer++];
     time_div = midi_data[pointer++] << 8 | midi_data[pointer];
-    // printf("header_len=%d, smf_format=%d, number_of_tracks=%d, time_division=%d\n", header_len, smf_format, number_of_tracks, time_div);
+    printf("header_len=%d, smf_format=%d, number_of_tracks=%d, time_division=%d\n", header_len, smf_format, number_of_tracks, time_div);
     if (smf_format != 0)
         return;
 
@@ -228,15 +253,16 @@ void play_midi(uint8_t *midi_data)
     if (midi_data[pointer++] != 0x6B) // "k"
         return;
     track_len = midi_data[pointer++] << 24 | midi_data[pointer++] << 16 | midi_data[pointer++] << 8 | midi_data[pointer++];
+    printf("track_len=%d\n", track_len);
     while (pointer < 16 + header_len + track_len)
     {
         uint32_t delta_tick = 0;
-        // printf("pointer=%04x ", pointer);
+        printf("pointer=%04x ", pointer);
         do
         {
             delta_tick = (delta_tick << 7) | (midi_data[pointer] & 0b1111111);
         } while (midi_data[pointer++] & 0b10000000);
-        // printf("delta=%d ", delta_tick);
+        printf("delta=%d ", delta_tick);
         if (delta_tick != 0)
         {
             uint64_t delta_us = (tempo / time_div) * delta_tick;
@@ -244,54 +270,67 @@ void play_midi(uint8_t *midi_data)
         }
 
         uint8_t status_byte = midi_data[pointer++];
-        // printf("status=%02x ", status_byte);
+        printf("status=%02x ", status_byte);
         if ((status_byte & 0xF0) == 0x80) // Note-off
         {
             uint8_t note_number = midi_data[pointer++];
             uint8_t velocity = midi_data[pointer++];
             note_control(false, note_number, velocity);
-            // printf("Note-off note=%d velocity=%d\n", note_number, velocity);
+            printf("Note-off note=%d velocity=%d\n", note_number, velocity);
         }
         else if ((status_byte & 0xF0) == 0x90) // Note-on
         {
             uint8_t note_number = midi_data[pointer++];
             uint8_t velocity = midi_data[pointer++];
             note_control(true, note_number, velocity);
-            // printf("Note-on note=%d velocity=%d\n", note_number, velocity);
+            printf("Note-on note=%d velocity=%d\n", note_number, velocity);
         }
         else if ((status_byte & 0xF0) == 0xA0) // Polyphonic-key-pressure
         {
             uint8_t note_number = midi_data[pointer++];
             uint8_t pressure = midi_data[pointer++];
-            // printf("Polyphonic-key-pressure note=%d pressure=%d\n", note_number, pressure);
+            printf("Polyphonic-key-pressure note=%d pressure=%d\n", note_number, pressure);
         }
         else if ((status_byte & 0xF0) == 0xB0) // Control-Change
         {
             uint8_t control_number = midi_data[pointer++];
             uint8_t control_data = midi_data[pointer++];
-            // printf("Control-change control_number=%d control_data=%d\n", control_number, control_data);
+            printf("Control-change control_number=%d control_data=%d\n", control_number, control_data);
         }
         else if ((status_byte & 0xF0) == 0xC0) // Program-change
         {
             uint8_t program_number = midi_data[pointer++];
-            // printf("Program-change program_number=%d\n", program_number);
+            printf("Program-change program_number=%d\n", program_number);
         }
         else if ((status_byte & 0xF0) == 0xD0) // Channel-pressure
         {
             uint8_t pressure = midi_data[pointer++];
-            // printf("Channel-pressure pressure=%d\n", pressure);
+            printf("Channel-pressure pressure=%d\n", pressure);
         }
         else if ((status_byte & 0xF0) == 0xE0) // Pitch-bend-change
         {
             uint16_t pitch_bend = midi_data[pointer++] | (midi_data[pointer++] << 8);
-            // printf("Pitch-bend-change pitch_bend=%d\n", pitch_bend);
+            printf("Pitch-bend-change pitch_bend=%d\n", pitch_bend);
         }
         else if (status_byte == 0xF0) // SysEx
         {
-            while (midi_data[pointer++] != 0xF7)
+            uint32_t event_length = 0;
+            do
             {
-            }
-            // printf("SysEx\n");
+                event_length = (event_length << 7) | (midi_data[pointer] & 0b1111111);
+            } while (midi_data[pointer++] & 0b10000000);
+            pointer += event_length;
+            printf("SysEx event_len=%d\n", event_length);
+        }
+        else if (status_byte == 0xF7) // SysEx
+        {
+            uint32_t event_length = 0;
+            do
+            {
+                event_length = (event_length << 7) | (midi_data[pointer] & 0b1111111);
+            } while (midi_data[pointer++] & 0b10000000);
+            pointer += event_length;
+            printf("SysEx event_len=%d\n", event_length);
         }
         else if (status_byte == 0xFF) // Meta Event
         {
@@ -301,13 +340,13 @@ void play_midi(uint8_t *midi_data)
             {
                 pointer++;
                 uint16_t sequence = (midi_data[pointer++] << 8) | midi_data[pointer++];
-                // printf("Sequence-number sequence=%d\n", sequence);
+                printf("Sequence-number sequence=%d\n", sequence);
             }
             else if (event_type == 0x01) // Text-event
             {
                 do
                 {
-                    event_length = (delta_tick << 7) | (midi_data[pointer] & 0b1111111);
+                    event_length = (event_length << 7) | (midi_data[pointer] & 0b1111111);
                 } while (midi_data[pointer++] & 0b10000000);
                 char text[event_length + 1];
                 for (auto i = 0; i < event_length; i++)
@@ -315,13 +354,13 @@ void play_midi(uint8_t *midi_data)
                     text[i] = midi_data[pointer++];
                 }
                 text[event_length] = 0;
-                // printf("Text-event text=%s\n", text);
+                printf("Text-event text=%s\n", text);
             }
             else if (event_type == 0x02) // Copyright
             {
                 do
                 {
-                    event_length = (delta_tick << 7) | (midi_data[pointer] & 0b1111111);
+                    event_length = (event_length << 7) | (midi_data[pointer] & 0b1111111);
                 } while (midi_data[pointer++] & 0b10000000);
                 char text[event_length + 1];
                 for (auto i = 0; i < event_length; i++)
@@ -329,13 +368,13 @@ void play_midi(uint8_t *midi_data)
                     text[i] = midi_data[pointer++];
                 }
                 text[event_length] = 0;
-                // printf("Copyright text=%s\n", text);
+                printf("Copyright text=%s\n", text);
             }
             else if (event_type == 0x03) // Sequence-name
             {
                 do
                 {
-                    event_length = (delta_tick << 7) | (midi_data[pointer] & 0b1111111);
+                    event_length = (event_length << 7) | (midi_data[pointer] & 0b1111111);
                 } while (midi_data[pointer++] & 0b10000000);
                 char text[event_length + 1];
                 for (auto i = 0; i < event_length; i++)
@@ -343,13 +382,13 @@ void play_midi(uint8_t *midi_data)
                     text[i] = midi_data[pointer++];
                 }
                 text[event_length] = 0;
-                // printf("Sequence-name text=%s\n", text);
+                printf("Sequence-name text=%s\n", text);
             }
             else if (event_type == 0x04) // Instrument-name
             {
                 do
                 {
-                    event_length = (delta_tick << 7) | (midi_data[pointer] & 0b1111111);
+                    event_length = (event_length << 7) | (midi_data[pointer] & 0b1111111);
                 } while (midi_data[pointer++] & 0b10000000);
                 char text[event_length + 1];
                 for (auto i = 0; i < event_length; i++)
@@ -357,13 +396,13 @@ void play_midi(uint8_t *midi_data)
                     text[i] = midi_data[pointer++];
                 }
                 text[event_length] = 0;
-                // printf("Instrument-name text=%s\n", text);
+                printf("Instrument-name text=%s\n", text);
             }
             else if (event_type == 0x05) // Lyrics
             {
                 do
                 {
-                    event_length = (delta_tick << 7) | (midi_data[pointer] & 0b1111111);
+                    event_length = (event_length << 7) | (midi_data[pointer] & 0b1111111);
                 } while (midi_data[pointer++] & 0b10000000);
                 char text[event_length + 1];
                 for (auto i = 0; i < event_length; i++)
@@ -371,13 +410,13 @@ void play_midi(uint8_t *midi_data)
                     text[i] = midi_data[pointer++];
                 }
                 text[event_length] = 0;
-                // printf("Lyrics text=%s\n", text);
+                printf("Lyrics text=%s\n", text);
             }
             else if (event_type == 0x06) // Marker
             {
                 do
                 {
-                    event_length = (delta_tick << 7) | (midi_data[pointer] & 0b1111111);
+                    event_length = (event_length << 7) | (midi_data[pointer] & 0b1111111);
                 } while (midi_data[pointer++] & 0b10000000);
                 char text[event_length + 1];
                 for (auto i = 0; i < event_length; i++)
@@ -385,13 +424,13 @@ void play_midi(uint8_t *midi_data)
                     text[i] = midi_data[pointer++];
                 }
                 text[event_length] = 0;
-                // printf("Marker text=%s\n", text);
+                printf("Marker text=%s\n", text);
             }
             else if (event_type == 0x07) // Cue-point
             {
                 do
                 {
-                    event_length = (delta_tick << 7) | (midi_data[pointer] & 0b1111111);
+                    event_length = (event_length << 7) | (midi_data[pointer] & 0b1111111);
                 } while (midi_data[pointer++] & 0b10000000);
                 char text[event_length + 1];
                 for (auto i = 0; i < event_length; i++)
@@ -399,45 +438,45 @@ void play_midi(uint8_t *midi_data)
                     text[i] = midi_data[pointer++];
                 }
                 text[event_length] = 0;
-                // printf("Cue-point text=%s\n", text);
+                printf("Cue-point text=%s\n", text);
             }
             else if (event_type == 0x20) // Channel-prefix
             {
                 pointer++;
                 uint8_t channel_prefix = midi_data[pointer++];
-                // printf("Channel-prefix channel=%d\n", channel_prefix);
+                printf("Channel-prefix channel=%d\n", channel_prefix);
             }
             else if (event_type == 0x2F) // End-of-track
             {
-                // printf("End-of-track\n");
+                printf("End-of-track\n");
                 return;
             }
             else if (event_type == 0x51) // Set-tempo
             {
                 pointer++;
                 tempo = (midi_data[pointer++] << 16) | (midi_data[pointer++] << 8) | midi_data[pointer++];
-                // printf("Set-tempo tempo=%d\n", tempo);
+                printf("Set-tempo tempo=%d\n", tempo);
             }
             else if (event_type == 0x54) // SMPTE-offset
             {
                 pointer += 6;
-                // printf("SMTPE-offset\n");
+                printf("SMTPE-offset\n");
             }
             else if (event_type == 0x58) // Beat
             {
                 pointer += 5;
-                // printf("Beat\n");
+                printf("Beat\n");
             }
             else if (event_type == 0x59) // Key
             {
                 pointer += 3;
-                // printf("Key\n");
+                printf("Key\n");
             }
             else if (event_type == 0x7F) // Special-meta-event
             {
                 do
                 {
-                    event_length = (delta_tick << 7) | (midi_data[pointer] & 0b1111111);
+                    event_length = (event_length << 7) | (midi_data[pointer] & 0b1111111);
                 } while (midi_data[pointer++] & 0b10000000);
                 char data[event_length + 1];
                 for (auto i = 0; i < event_length; i++)
@@ -445,10 +484,11 @@ void play_midi(uint8_t *midi_data)
                     data[i] = midi_data[pointer++];
                 }
                 data[event_length] = 0;
-                // printf("Special-meta-event data=%s\n", data);
+                printf("Special-meta-event data=%s\n", data);
             }
         }
     }
+    printf("MIDI read finished! pointer=%x\n", pointer);
 }
 
 void core1()
@@ -456,12 +496,23 @@ void core1()
     sem_acquire_blocking(&core_sem);
     uint8_t song = core_song;
     sem_release(&core_sem);
-
+    note_control(false, 0, 0, true);
     switch (song)
     {
     case 0:
-        // song_flog();
-        play_midi(midi_test);
+        play_midi(midi_chopin10_4);
+        break;
+
+    case 1:
+        play_midi(midi_koinu);
+        break;
+
+    case 2:
+        play_midi(midi_la_campanella);
+        break;
+
+    case 3:
+        play_midi(midi_liebestraum);
         break;
 
     default:
@@ -615,7 +666,7 @@ void core0()
             buz0 = new Buzzer(BUZ_0_PIN);
             buz1 = new Buzzer(BUZ_1_PIN);
             sem_init(&core_sem, 1, 1);
-            core_song = time_set_ms >= 2000 ? 0 : 1;
+            core_song = to_us_since_boot(get_absolute_time()) % 4;  // 曲数を設定する
             core_exit = false;
             sem_release(&core_sem);
             multicore_launch_core1(core1);
